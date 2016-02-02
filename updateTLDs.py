@@ -1,4 +1,9 @@
 import time, urllib2, os.path
+"""
+This should update the TLDs list every few days if you plug this into your main application. There may be some variance in time.time()
+and system local timezones (unsure, didn't test). Also maybe some issues with st_mtime depending on your operating system.
+"""
+
 
 # one day = 86,400 seconds
 day = 86400
