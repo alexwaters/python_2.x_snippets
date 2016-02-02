@@ -58,15 +58,16 @@ def update_tlds(filename, url):
     return status
 
 
-if not os.path.isfile(filename):
-    update_tlds(filename, url)
+if __name__ == '__main__':
+    if not os.path.isfile(filename):
+        update_tlds(filename, url)
 
-file_mod_time = os.stat(filename).st_mtime
-time_elapsed = time.time() - file_mod_time
+    file_mod_time = os.stat(filename).st_mtime
+    time_elapsed = time.time() - file_mod_time
 
-if time_elapsed > run_every:
-    updated = update_tlds(filename, url)
-    print updated
-else:
-    print 'TLDs last updated about %s days ago.' % (
-        str(round((time_elapsed/day), 2)))
+    if time_elapsed > run_every:
+        updated = update_tlds(filename, url)
+        print updated
+    else:
+        print 'TLDs last updated about %s days ago.' % (
+            str(round((time_elapsed/day), 2)))
