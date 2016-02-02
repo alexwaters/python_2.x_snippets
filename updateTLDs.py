@@ -49,19 +49,17 @@ if __name__ == '__main__':
     filename = 'TLDs.txt'
     url = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
 
-    if not os.path.isfile(filename):
-        update_tlds(filename, url)
-    else:
-        file_mod_time = os.stat(filename).st_mtime
-        time_elapsed = time.time() - file_mod_time
+    delta_mtime = 0
+    if os.path.isfile(filename):
+        delta_mtime = time.time() - os.stat(filename).st_mtime
 
-        if time_elapsed > run_every:
-            tlds = update_tlds(filename, url)
-            if not tlds:
-                print 'Success, list is current.'
-            else:
-                print 'Success, list has been updated.'
-                print 'TLDs Added: %s' % ', '.join(tlds)
-        else:
-            print 'TLDs last updated about %s days ago.' % (
-                round(time_elapsed / day, 2))
+    if delta_mtime < run_every:
+        print 'TLDs last updated about %s days ago.' % (
+            round(delta_mtime / day, 2))
+
+    tlds = update_tlds(filename, url)
+    if not tlds:
+        print 'Success, list is current.'
+    else:
+        print 'Success, list has been updated.'
+        print 'TLDs Added: %s' % ', '.join(tlds)
