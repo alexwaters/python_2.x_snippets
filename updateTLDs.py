@@ -22,9 +22,10 @@ def update_tlds(filename, url):
 
     :param filename: the location of the local file
     :param url: the location of the remote file
+    :return: List of TLDs that were added to the file.
     """
     try:
-        old_tlds, status = [], ''
+        old_tlds = []
         new_tlds = [tld.strip('\n') for tld in urllib2.urlopen(url)
                     if '#' not in tld]
         if os.path.isfile(filename):
@@ -32,18 +33,14 @@ def update_tlds(filename, url):
                         if '#' not in line]
 
         if old_tlds == new_tlds:
-            status = '%sSuccess, list is current.\n' % status
+            return []
         else:
             with open(filename, 'w') as f:
                 for tld in new_tlds:
                     f.write(tld + '\n')
-            status = '%sSuccess, list has been updated.\n' % status
-            status = '%sTLDs Added: %s\n' % (
-                status, ', '.join(sorted(set(new_tlds) - set(old_tlds))))
+            return sorted(set(new_tlds) - set(old_tlds))
     except Exception as e:
-        status = e
-
-    return status
+        return e
 
 
 if __name__ == '__main__':
@@ -59,7 +56,12 @@ if __name__ == '__main__':
         time_elapsed = time.time() - file_mod_time
 
         if time_elapsed > run_every:
-            print update_tlds(filename, url)
+            tlds = update_tlds(filename, url)
+            if not tlds:
+                print 'Success, list is current.'
+            else:
+                print 'Success, list has been updated.'
+                print 'TLDs Added: %s' % ', '.join(tlds)
         else:
             print 'TLDs last updated about %s days ago.' % (
                 round(time_elapsed / day, 2))
