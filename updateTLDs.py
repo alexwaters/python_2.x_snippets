@@ -24,24 +24,19 @@ def update_tlds(filename, url):
     :param url: the location of the remote file
     """
     try:
-        old_tlds, new_tlds, status = [], [], ''
-
-        for tld in urllib2.urlopen(url):
-            if '#' not in tld:
-                new_tlds.append(tld.strip('\n'))
-
-        with open(filename, 'a+') as f:
-            f.seek(0)
-            for line in f:
-                if '#' not in line:
-                    old_tlds.append(line.strip('\n'))
+        old_tlds, status = [], ''
+        new_tlds = [tld.strip('\n') for tld in urllib2.urlopen(url)
+                    if '#' not in tld]
+        if os.path.isfile(filename):
+            old_tlds = [line.strip('\n') for line in open(filename)
+                        if '#' not in line]
 
         if old_tlds == new_tlds:
             status = '%sSuccess, list is current.\n' % status
         else:
-            with open(filename, 'w+') as ff:
+            with open(filename, 'w') as f:
                 for tld in new_tlds:
-                    ff.write(tld + '\n')
+                    f.write(tld + '\n')
             status = '%sSuccess, list has been updated.\n' % status
             status = '%sTLDs Added: %s\n' % (
                 status, ', '.join(sorted(set(new_tlds) - set(old_tlds))))
