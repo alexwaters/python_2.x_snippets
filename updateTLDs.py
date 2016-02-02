@@ -12,32 +12,32 @@ import os.path
 # one day = 86,400 seconds
 day = 86400
 run_every = day*3
-loc = 'TLDs.txt'
-src = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+filename = 'TLDs.txt'
+url = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
 start_time = time.time()
 
 
-def update_tlds(location, source):
+def update_tlds(filename, url):
     """
-    Downloads a list of TLDs from 'source' and stores the TLDs in list
+    Downloads a list of TLDs from 'url' and stores the TLDs in list
     'new_tlds'.
 
-    Compares 'new_tlds' to a local file at 'location', and creates a
+    Compares 'new_tlds' to a local file at 'filename', and creates a
     file there if it does not exist.  (If you get write errors, it may
     be due to your file permissions.) If there are 'new_tlds' not in
     'old_tlds' it will rewrite the file with the current 'new_tlds'.
 
-    :param location: the location of the local file
-    :param source: the location of the remote file
+    :param filename: the location of the local file
+    :param url: the location of the remote file
     """
     try:
         old_tlds, new_tlds, status = [], [], ''
 
-        for tld in urllib2.urlopen(source):
+        for tld in urllib2.urlopen(url):
             if '#' not in tld:
                 new_tlds.append(tld.strip('\n'))
 
-        with open(location, 'a+') as f:
+        with open(filename, 'a+') as f:
             f.seek(0)
             for line in f:
                 if '#' not in line:
@@ -46,7 +46,7 @@ def update_tlds(location, source):
         if old_tlds == new_tlds:
             status += 'Success, list is current.\n'
         else:
-            with open(location, 'w+') as ff:
+            with open(filename, 'w+') as ff:
                 for tld in new_tlds:
                     ff.write(tld + '\n')
             status += 'Success, list has been updated.\n' + \
@@ -59,14 +59,14 @@ def update_tlds(location, source):
     return status
 
 
-if not os.path.isfile(loc):
-    update_tlds(loc, src)
+if not os.path.isfile(filename):
+    update_tlds(filename, url)
 
-file_mod_time = os.stat(loc).st_mtime
+file_mod_time = os.stat(filename).st_mtime
 time_elapsed = time.time() - file_mod_time
 
 if time_elapsed > run_every:
-    updated = update_tlds(loc, src)
+    updated = update_tlds(filename, url)
     print updated
 else:
     print "TLDs last updated about " + str(round((time_elapsed/day), 2)) + \
