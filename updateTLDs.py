@@ -9,12 +9,6 @@ import time
 import urllib2
 import os.path
 
-# one day = 86,400 seconds
-day = 86400
-run_every = day*3
-filename = 'TLDs.txt'
-url = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
-
 
 def update_tlds(filename, url):
     """
@@ -58,6 +52,11 @@ def update_tlds(filename, url):
 
 
 if __name__ == '__main__':
+    day = 86400  # one day = 86,400 seconds
+    run_every = day * 3
+    filename = 'TLDs.txt'
+    url = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+
     if not os.path.isfile(filename):
         update_tlds(filename, url)
 
