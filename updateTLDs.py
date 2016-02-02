@@ -58,7 +58,10 @@ if __name__ == '__main__':
             round(delta_mtime / day, 2))
 
     tlds = update_tlds(filename, url)
-    if not tlds:
+    if isinstance(tlds, Exception):
+        print 'Error: %r' % tlds
+        exit(1)
+    elif not tlds:
         print 'Success, list is current.'
     else:
         print 'Success, list has been updated.'
