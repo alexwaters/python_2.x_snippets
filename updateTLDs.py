@@ -44,15 +44,14 @@ def update_tlds(filename, url):
                     old_tlds.append(line.strip('\n'))
 
         if old_tlds == new_tlds:
-            status += 'Success, list is current.\n'
+            status = '%sSuccess, list is current.\n' % status
         else:
             with open(filename, 'w+') as ff:
                 for tld in new_tlds:
                     ff.write(tld + '\n')
-            status += 'Success, list has been updated.\n' + \
-                      'TLDs Added: ' + \
-                      str(list(set(new_tlds)-set(old_tlds))) + '\n'
-
+            status = '%sSuccess, list has been updated.\n' % status
+            status = '%sTLDs Added: %s\n' % (
+                status, ', '.join(sorted(set(new_tlds) - set(old_tlds))))
     except Exception as e:
         status = e
 
@@ -69,5 +68,5 @@ if time_elapsed > run_every:
     updated = update_tlds(filename, url)
     print updated
 else:
-    print "TLDs last updated about " + str(round((time_elapsed/day), 2)) + \
-          " days ago."
+    print 'TLDs last updated about %s days ago.' % (
+        str(round((time_elapsed/day), 2)))
