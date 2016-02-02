@@ -64,8 +64,7 @@ if __name__ == '__main__':
         time_elapsed = time.time() - file_mod_time
 
         if time_elapsed > run_every:
-            updated = update_tlds(filename, url)
-            print updated
+            print update_tlds(filename, url)
         else:
             print 'TLDs last updated about %s days ago.' % (
                 str(round((time_elapsed/day), 2)))
