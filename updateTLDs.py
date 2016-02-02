@@ -14,7 +14,6 @@ day = 86400
 run_every = day*3
 filename = 'TLDs.txt'
 url = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
-start_time = time.time()
 
 
 def update_tlds(filename, url):
