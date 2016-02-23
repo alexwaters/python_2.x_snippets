@@ -2,7 +2,7 @@ from flask import Flask
 from config import configure_app
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
-from flask_security import current_user, login_required
+from flask_security import current_user, roles_required
 from data.model import db
 
 '''
@@ -18,7 +18,7 @@ db.init_app(app)
 
 class AdminIndex(AdminIndexView):
     @expose('/')
-    @login_required
+    @roles_required('admin')
     def index(self):
         return self.render('admin/index.html')
 
