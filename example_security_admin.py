@@ -1,8 +1,8 @@
 from flask import Flask
 from config import configure_app
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
-from flask_security import current_user
+from flask_security import current_user, login_required
 from data.model import db
 
 '''
@@ -16,7 +16,13 @@ configure_app(app)
 db.init_app(app)
 
 
-admin = Admin(app, name='Example', template_mode='bootstrap3')
+class AdminIndex(AdminIndexView):
+    @expose('/')
+    @login_required
+    def index(self):
+        return self.render('admin/index.html')
+
+admin = Admin(app, name='Kelvin', template_mode='bootstrap3', index_view=AdminIndex())
 
 
 class RoleAdmin(ModelView):
