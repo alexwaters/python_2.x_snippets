@@ -4,10 +4,18 @@ your main application. There may be some variance in time.time() and
 system local timezones (unsure, didn't test). Also maybe some issues
 with st_mtime depending on your operating system.
 """
+#todo add capability to put in a word cloud or generate a word cloud
+#plug the word cloud into gpt
+#query some DNS APIs to seek available domains
+#
 
 import time
 import urllib2
 import os.path
+
+words = input("Give me some words to search...")
+#def search_names(names):
+
 
 
 def update_tlds(filename, url):
